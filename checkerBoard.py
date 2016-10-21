@@ -27,7 +27,6 @@ class CheckerBoard(Canvas):
     
     #Description: Start a new game. Reset all checkers to starting position
     def startNewGame(self):
-        print "hey"
         #Delete all checkers
         for i in self.greyPieces:
             self.delete(i[0])
