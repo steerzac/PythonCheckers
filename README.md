@@ -1,5 +1,5 @@
 # PythonCheckers
-In order to learn Python, I decided to develop a simple GUI based Checkers game. Implemented using Tk GUI library, it was a great project that allowed me to explore the language and create something fun at the same time. 
+In order to learn Python, I developed a simple GUI based Checkers game. Implemented using Tk GUI library, it was a great project that allowed me to explore the language and create something fun at the same time. 
 
 Getting Started
 1. Clone the respository.
