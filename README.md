@@ -18,6 +18,6 @@ Getting Started
 
     `$ brew install python`
 
-    `$ python "__init__.py"`
+    `$ python __init__.py`
 
 5. Enjoy your game of checkers!
