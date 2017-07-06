@@ -24,7 +24,7 @@ class CheckerBoard(Canvas):
     greyCount = 12
     redScoreBoard = Label(gb, text="Red: %i" % redCount)
     greyScoreBoard = Label(gb, text="Grey: %i" % greyCount)
-    
+
     #Description: Start a new game. Reset all checkers to starting position
     def startNewGame(self):
         #Delete all checkers
@@ -32,18 +32,18 @@ class CheckerBoard(Canvas):
             self.delete(i[0])
         for i in self.redPieces:
             self.delete(i[0])
-        
+
         #Delete all arrays storing checkers. (not the board array. That stores game tiles)
         for i in range(0, len(self.greyPieces)):
             self.greyPieces.pop()
-            
+
         for i in range(0, len(self.redPieces)):
             self.redPieces.pop()
-            
+
         for i in range(0, len(self.highlightedTiles)):
             self.highlightedTiles.pop()
-    
-        
+
+
         #Reset all variables (not reseting board)
         self.greyPieces = []
         self.redPieces = []
@@ -55,12 +55,12 @@ class CheckerBoard(Canvas):
         self.redCount = 12
         self.greyCount = 12
         self.redScoreBoard.config(text="Red: %i" % self.redCount)
-        self.greyScoreBoard.config(text="Red: %i" % self.greyCount)
-        
+        self.greyScoreBoard.config(text="Grey: %i" % self.greyCount)
+
         #Make new checkers
         self.createCheckers()
-        
-        
+
+
     #Description: Initializes main window, canvas, tiles, and checkers
     #Creates main window, canvas, tiles, and checkers
     def __init__(self):
@@ -74,8 +74,8 @@ class CheckerBoard(Canvas):
         self.createTiles()
         self.createCheckers()
         self.gb.mainloop()
-        
-        
+
+
     #Description: Function creates red and black tiles for the game board
     def createTiles(self):
         width = self.tileWidth
@@ -93,7 +93,7 @@ class CheckerBoard(Canvas):
                     idVal = self.create_rectangle(x1, y1, x2, y2, fill="black")
                 if idVal != 0:
                     self.board.append((idVal, j, i, x1, x2, y1, y2))
-        
+
     #Description: Function places all checkers on the game board at their starting positions
     def createCheckers(self):
         checkerWidth = self.tileWidth
@@ -104,7 +104,7 @@ class CheckerBoard(Canvas):
             if i == 3 or i == 4:
                 continue
             #Calculate y1 and y2 of the oval that forms the checker
-            y1 = (i * checkerWidth) + self.checkerBorder 
+            y1 = (i * checkerWidth) + self.checkerBorder
             y2 = ((i + 1) * checkerWidth) - self.checkerBorder
             #Grey checkers are placed on rows 0-2
             if i < 3:
@@ -112,7 +112,7 @@ class CheckerBoard(Canvas):
             #Red checkers are placed on rows 5-7
             elif i > 4:
                 checkerColor = "red"
-            #Iterate over each column in the row. Column indicates x position    
+            #Iterate over each column in the row. Column indicates x position
             for j in range(0, self.columns):
                 #If the sum of the row(i) and column(j) is odd, a checker should go in this cell
                 if ((i + j) % 2 == 1):
@@ -121,7 +121,7 @@ class CheckerBoard(Canvas):
                     x2 = ((j + 1) * checkerHeight) - self.checkerBorder
                     #Draw the checker on the board, giving it a color tag and an id tag
                     idTag = self.create_oval(x1, y1, x2, y2, fill=checkerColor)
-                    self.tag_bind(idTag, "<ButtonPress-1>", self.processCheckerClick) 
+                    self.tag_bind(idTag, "<ButtonPress-1>", self.processCheckerClick)
                     #Create a checker object to keep track of this newly created checker
                     newChecker = CheckerPiece(i, j, checkerColor, False, idTag)
                     #Append the id and checker object to their proper arrays
@@ -129,7 +129,7 @@ class CheckerBoard(Canvas):
                         self.greyPieces.append((idTag, newChecker))
                     elif checkerColor == "red":
                         self.redPieces.append((idTag, newChecker))
-                        
+
     #Description: Process the user clicking a checker
     def processCheckerClick(self, event):
         x = self.canvasx(event.x)
@@ -150,9 +150,9 @@ class CheckerBoard(Canvas):
             self.showAllAvailableRegularMoves(selectedChecker)
             #Show all available jump moves for the selected checker
             self.showAllAvailableJumpMoves(selectedChecker)
-        
-      
-    #Description: process the user selecting a highlighted tile  
+
+
+    #Description: process the user selecting a highlighted tile
     def processHighlightedTileClicked(self, event):
         x = self.canvasx(event.x)
         y = self.canvasy(event.y)
@@ -166,11 +166,11 @@ class CheckerBoard(Canvas):
                 newRow = i[1]
                 newCol = i[2]
                 jumpedCheckerID = self.getJumpedCheckerID(newRow, newCol)
-                break   
-        #If newRow == 100, invalid tile was selected 
+                break
+        #If newRow == 100, invalid tile was selected
         if newRow == 100:
             return
-        
+
         #Move the currently selected checker to the tile with the selected idVal
         self.moveCurrentlySelectedChecker(newRow, newCol)
         #Reset all highlighted tiles
@@ -189,14 +189,14 @@ class CheckerBoard(Canvas):
         #If the selected checker was just a normal move, switch players
         else:
             self.switchCurrentPlayer()
-            
+
     #Description: Switch the current player to the next player
     def switchCurrentPlayer(self):
         if self.currentPlayer == "red":
             self.currentPlayer = "grey"
         elif self.currentPlayer == "grey":
             self.currentPlayer = "red"
-    
+
     #Description: Remove checker from the board and its respective checker array
     def removeChecker(self, checkerID):
         if checkerID != 0:
@@ -214,7 +214,7 @@ class CheckerBoard(Canvas):
                     self.greyScoreBoard.config(text="Grey: %i" % self.greyCount)
                     break
             self.checkForWin()
-            
+
     #Description: Check if red or grey has won. If so, congratulate them
     def checkForWin(self):
         if self.redCount <= 0:
@@ -225,7 +225,7 @@ class CheckerBoard(Canvas):
             redWinnerLabel = Label(self.gb, text="Red Wins!")
             redWinnerLabel.pack()
             self.stopTheGame()
-            
+
     #Description: Stops the game by unbinding all events
     def stopTheGame(self):
         for i in self.redPieces:
@@ -237,18 +237,18 @@ class CheckerBoard(Canvas):
             if checkerIDVal != 0:
                 self.tag_unbind(checkerIDVal, "<ButtonPress-1>")
         self.resetHighlightedTiles()
-            
-    
+
+
     #Description: given row and column, get jumped checker id
     def getJumpedCheckerID(self, row_, col_):
         for i in self.highlightedTiles:
             if row_ == i[0] and col_ == i[1]:
                 return i[2]
         return 0
-        
-    #Description: move the currently selected checker to (newRow_, newCol_)  
+
+    #Description: move the currently selected checker to (newRow_, newCol_)
     def moveCurrentlySelectedChecker(self, newRow_, newCol_):
-        y1 = (newRow_ * self.tileWidth) + self.checkerBorder 
+        y1 = (newRow_ * self.tileWidth) + self.checkerBorder
         y2 = ((newRow_ + 1) * self.tileWidth) - self.checkerBorder
         x1 = (newCol_ * self.tileWidth) + self.checkerBorder
         x2 = ((newCol_ + 1) * self.tileWidth) - self.checkerBorder
@@ -258,8 +258,8 @@ class CheckerBoard(Canvas):
         self.currentlySelectedCheckerObject.updateLocation(newRow_, newCol_)
         if self.currentlySelectedCheckerObject.isKing():
             self.itemconfig(self.currentlySelectedCheckerID, outline="cyan")
-     
-       
+
+
     #Description: reset all highlighted tiles to black borders instead of yellow
     #                unbind all events the highlighted tiles had
     def resetHighlightedTiles(self):
@@ -269,70 +269,70 @@ class CheckerBoard(Canvas):
             if tileIDVal != 0:
                 self.itemconfig(tileIDVal, outline="black")
                 self.tag_unbind(tileIDVal, "<ButtonPress-1>")
-        
+
         #Remove all current values from highlightedTiles
         for i in range(0, len(self.highlightedTiles)):
             self.highlightedTiles.pop()
-     
-                
+
+
     #Description: show available moves for a selected checker
     def showAllAvailableRegularMoves(self, _selectedChecker):
         selectedChecker = _selectedChecker
         selectedCheckerIsKing = selectedChecker.isKing()
         selectedCheckerColor = selectedChecker.getColor()
         openSpaces = []
-        
+
         if selectedCheckerIsKing:
             #Check north west neighbor
             rowValue = selectedChecker.getNWneighbor()[0]
             colValue = selectedChecker.getNWneighbor()[1]
-            if (not self.isTileOccupied(rowValue, colValue)[0]): 
+            if (not self.isTileOccupied(rowValue, colValue)[0]):
                 openSpaces.append(selectedChecker.getNWneighbor())
-            
+
             #Check north east neighbor
             rowValue = selectedChecker.getNEneighbor()[0]
             colValue = selectedChecker.getNEneighbor()[1]
-            if (not self.isTileOccupied(rowValue, colValue)[0]): 
+            if (not self.isTileOccupied(rowValue, colValue)[0]):
                 openSpaces.append(selectedChecker.getNEneighbor())
-            
+
             #Check south west neighbor
             rowValue = selectedChecker.getSWneighbor()[0]
             colValue = selectedChecker.getSWneighbor()[1]
-            if (not self.isTileOccupied(rowValue, colValue)[0]): 
+            if (not self.isTileOccupied(rowValue, colValue)[0]):
                 openSpaces.append(selectedChecker.getSWneighbor())
-                
+
             #Check south east neighbor
             rowValue = selectedChecker.getSEneighbor()[0]
             colValue = selectedChecker.getSEneighbor()[1]
-            if (not self.isTileOccupied(rowValue, colValue)[0]): 
+            if (not self.isTileOccupied(rowValue, colValue)[0]):
                 openSpaces.append(selectedChecker.getSEneighbor())
         #Else if checker is normal and red, only check north west and north east
         elif selectedCheckerColor == "red":
             #Check north west neighbor
             rowValue = selectedChecker.getNWneighbor()[0]
             colValue = selectedChecker.getNWneighbor()[1]
-            if (not self.isTileOccupied(rowValue, colValue)[0]): 
+            if (not self.isTileOccupied(rowValue, colValue)[0]):
                 openSpaces.append(selectedChecker.getNWneighbor())
-            
+
             #Check north east neighbor
             rowValue = selectedChecker.getNEneighbor()[0]
             colValue = selectedChecker.getNEneighbor()[1]
-            if (not self.isTileOccupied(rowValue, colValue)[0]): 
+            if (not self.isTileOccupied(rowValue, colValue)[0]):
                 openSpaces.append(selectedChecker.getNEneighbor())
         #Else if checker is normal and grey, only check south west and south east
         elif selectedCheckerColor == "grey":
             #Check south west neighbor
             rowValue = selectedChecker.getSWneighbor()[0]
             colValue = selectedChecker.getSWneighbor()[1]
-            if (not self.isTileOccupied(rowValue, colValue)[0]): 
+            if (not self.isTileOccupied(rowValue, colValue)[0]):
                 openSpaces.append(selectedChecker.getSWneighbor())
-                
+
             #Check south east neighbor
             rowValue = selectedChecker.getSEneighbor()[0]
             colValue = selectedChecker.getSEneighbor()[1]
-            if (not self.isTileOccupied(rowValue, colValue)[0]): 
+            if (not self.isTileOccupied(rowValue, colValue)[0]):
                 openSpaces.append(selectedChecker.getSEneighbor())
-                
+
         #Highlight all open spaces
         for i in range(0, len(openSpaces)):
             highlightRow = openSpaces[i][0]
@@ -346,13 +346,13 @@ class CheckerBoard(Canvas):
                 self.highlightedTiles.append((highlightRow, highlightCol, 0))
             else:
                 print "Invalid tile"
-                
+
     #Description: Show all available jump moves a selected checker can make
     def showAllAvailableJumpMoves(self, selectedChecker_):
         selectedChecker = selectedChecker_
         selectedCheckerIsKing = selectedChecker.isKing()
         selectedCheckerColor = selectedChecker.getColor()
-        
+
         if selectedCheckerIsKing:
             #Check north west neighbor
             rowValue = selectedChecker.getNWneighbor()[0]
@@ -361,12 +361,12 @@ class CheckerBoard(Canvas):
             isTileOccupied = isTileOccupiedReturnArray[0]
             tileColor = isTileOccupiedReturnArray[1]
             jumpCheckerID = isTileOccupiedReturnArray[2]
-            if isTileOccupied: 
+            if isTileOccupied:
                 if selectedCheckerColor != tileColor:
                     jumpRow = selectedChecker.getNWneighbor()[0]
                     jumpCol = selectedChecker.getNWneighbor()[1]
                     self.checkForJump(jumpRow - 1, jumpCol - 1, jumpCheckerID)
-            
+
             #Check north east neighbor
             rowValue = selectedChecker.getNEneighbor()[0]
             colValue = selectedChecker.getNEneighbor()[1]
@@ -374,12 +374,12 @@ class CheckerBoard(Canvas):
             isTileOccupied = isTileOccupiedReturnArray[0]
             tileColor = isTileOccupiedReturnArray[1]
             jumpCheckerID = isTileOccupiedReturnArray[2]
-            if isTileOccupied: 
+            if isTileOccupied:
                 if selectedCheckerColor != tileColor:
                     jumpRow = selectedChecker.getNEneighbor()[0]
                     jumpCol = selectedChecker.getNEneighbor()[1]
                     self.checkForJump(jumpRow - 1, jumpCol + 1, jumpCheckerID)
-            
+
             #Check south west neighbor
             rowValue = selectedChecker.getSWneighbor()[0]
             colValue = selectedChecker.getSWneighbor()[1]
@@ -387,12 +387,12 @@ class CheckerBoard(Canvas):
             isTileOccupied = isTileOccupiedReturnArray[0]
             tileColor = isTileOccupiedReturnArray[1]
             jumpCheckerID = isTileOccupiedReturnArray[2]
-            if isTileOccupied: 
+            if isTileOccupied:
                 if selectedCheckerColor != tileColor:
                     jumpRow = selectedChecker.getSWneighbor()[0]
                     jumpCol = selectedChecker.getSWneighbor()[1]
                     self.checkForJump(jumpRow + 1, jumpCol - 1, jumpCheckerID)
-                
+
             #Check south east neighbor
             rowValue = selectedChecker.getSEneighbor()[0]
             colValue = selectedChecker.getSEneighbor()[1]
@@ -400,12 +400,12 @@ class CheckerBoard(Canvas):
             isTileOccupied = isTileOccupiedReturnArray[0]
             tileColor = isTileOccupiedReturnArray[1]
             jumpCheckerID = isTileOccupiedReturnArray[2]
-            if isTileOccupied: 
+            if isTileOccupied:
                 if selectedCheckerColor != tileColor:
                     jumpRow = selectedChecker.getSEneighbor()[0]
                     jumpCol = selectedChecker.getSEneighbor()[1]
                     self.checkForJump(jumpRow + 1, jumpCol + 1, jumpCheckerID)
-                    
+
         #Else if checker is a normal, red checker, check the north west and north east neighbors
         elif selectedCheckerColor == "red":
             #Check north west neighbor
@@ -415,12 +415,12 @@ class CheckerBoard(Canvas):
             isTileOccupied = isTileOccupiedReturnArray[0]
             tileColor = isTileOccupiedReturnArray[1]
             jumpCheckerID = isTileOccupiedReturnArray[2]
-            if isTileOccupied: 
+            if isTileOccupied:
                 if selectedCheckerColor != tileColor:
                     jumpRow = selectedChecker.getNWneighbor()[0]
                     jumpCol = selectedChecker.getNWneighbor()[1]
                     self.checkForJump(jumpRow - 1, jumpCol - 1, jumpCheckerID)
-            
+
             #Check north east neighbor
             rowValue = selectedChecker.getNEneighbor()[0]
             colValue = selectedChecker.getNEneighbor()[1]
@@ -428,12 +428,12 @@ class CheckerBoard(Canvas):
             isTileOccupied = isTileOccupiedReturnArray[0]
             tileColor = isTileOccupiedReturnArray[1]
             jumpCheckerID = isTileOccupiedReturnArray[2]
-            if isTileOccupied: 
+            if isTileOccupied:
                 if selectedCheckerColor != tileColor:
                     jumpRow = selectedChecker.getNEneighbor()[0]
                     jumpCol = selectedChecker.getNEneighbor()[1]
                     self.checkForJump(jumpRow - 1, jumpCol + 1, jumpCheckerID)
-        
+
         elif selectedCheckerColor == "grey":
             #Check south west neighbor
             rowValue = selectedChecker.getSWneighbor()[0]
@@ -442,12 +442,12 @@ class CheckerBoard(Canvas):
             isTileOccupied = isTileOccupiedReturnArray[0]
             tileColor = isTileOccupiedReturnArray[1]
             jumpCheckerID = isTileOccupiedReturnArray[2]
-            if isTileOccupied: 
+            if isTileOccupied:
                 if selectedCheckerColor != tileColor:
                     jumpRow = selectedChecker.getSWneighbor()[0]
                     jumpCol = selectedChecker.getSWneighbor()[1]
                     self.checkForJump(jumpRow + 1, jumpCol - 1, jumpCheckerID)
-                
+
             #Check south east neighbor
             rowValue = selectedChecker.getSEneighbor()[0]
             colValue = selectedChecker.getSEneighbor()[1]
@@ -455,12 +455,12 @@ class CheckerBoard(Canvas):
             isTileOccupied = isTileOccupiedReturnArray[0]
             tileColor = isTileOccupiedReturnArray[1]
             jumpCheckerID = isTileOccupiedReturnArray[2]
-            if isTileOccupied: 
+            if isTileOccupied:
                 if selectedCheckerColor != tileColor:
                     jumpRow = selectedChecker.getSEneighbor()[0]
                     jumpCol = selectedChecker.getSEneighbor()[1]
                     self.checkForJump(jumpRow + 1, jumpCol + 1, jumpCheckerID)
-                
+
     #Description: Highlight square if jump tile is not occupied
     def checkForJump(self, row_, col_, jumpedCheckerID_):
         #If row_ and col_ are not on the board, return
@@ -473,49 +473,49 @@ class CheckerBoard(Canvas):
                 self.itemconfig(tileIDVal, outline="yellow")
                 self.tag_bind(tileIDVal, "<ButtonPress-1>", self.processHighlightedTileClicked)
                 self.highlightedTiles.append((row_, col_, jumpedCheckerID_))
-    
-    
+
+
     #Description: Checks if tile described by the rowVal and colVal is occupied
     #                If occupied, returns (True, <colorOfCheckerOccupyingTheTile> , <idOfCheckerOccupyingTheTile>)
     #                If not occupied, returns (False, "NA", 0)
     def isTileOccupied(self, rowVal, colVal):
         row = rowVal
         col = colVal
-        
+
         if (not self.isValidPosition(row, col)):
             return (False, "NA", 0)
-        
+
         #Check if any grey checkers are in the tile
         for i in range(0, len(self.greyPieces)):
             currentChecker = self.greyPieces[i][1]
             if (row == currentChecker.getRow()) and (col == currentChecker.getColumn()):
                 return (True, "grey", self.greyPieces[i][0])
-        
+
         #Check if any red checkers are in the tile
         for i in range(0, len(self.redPieces)):
             currentChecker = self.redPieces[i][1]
             if (row == currentChecker.getRow()) and (col == currentChecker.getColumn()):
                 return (True, "red", self.redPieces[i][0])
-        
+
         #No checkers found in the tile, return (False, "NA", 0)
         return (False, "NA", 0)
-      
-       
-    #Description: returns the checker object representing the passed id value 
+
+
+    #Description: returns the checker object representing the passed id value
     def getCheckerObject(self, idValue):
         #Check greyPieces for id
         for i in range(0, len(self.greyPieces)):
             if self.greyPieces[i][0] == idValue:
                 return self.greyPieces[i][1]
-        
+
         #Check redPieces for id
         for i in range(0, len(self.redPieces)):
             if self.redPieces[i][0] == idValue:
                 return self.redPieces[i][1]
-        
+
         #If no checker found, return 0
         return 0
-    
+
     #Description: Return the tileID of the tile found at (row_, col_)
     def getTileID(self, row_, col_):
         row = row_
@@ -524,26 +524,21 @@ class CheckerBoard(Canvas):
             if row == self.board[i][1] and col == self.board[i][2]:
                 return self.board[i][0]
         return 0
-    
+
     #Description: Return true if the position is valid
     def isValidPosition(self, row_, col_):
         return self.isValidRow(row_) and self.isValidColumn(col_)
-    
+
     #Description: Return true if the row is valid
     def isValidRow(self, row_):
         if (row_ >= 0 and row_ <= 7):
             return True
         else:
             return False
-        
+
     #Description: Return true if the col is valid
     def isValidColumn(self, col_):
         if (col_ >= 0 and col_ <= 7):
             return True
         else:
             return False
-        
-           
-           
-
-        
