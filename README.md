@@ -16,8 +16,10 @@ Getting Started
 
 4. If python is not installed, install python and run the app.
 
-    ```$ brew install python
+    ```
+    $ brew install python
 
-    $ python "__init__.py"```
+    $ python "__init__.py"
+    ```
 
 5. Enjoy your game of checkers!
