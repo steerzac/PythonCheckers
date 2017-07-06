@@ -4,7 +4,7 @@ In order to learn Python, I developed a simple GUI based Checkers game. Implemen
 Getting Started
 1. Clone the respository.
 
-    `$ git clone <link-to-repo>`
+    `$ git clone https://github.com/steerzac/PythonCheckers.git`
 
 2. Check that python is installed
 
