@@ -4,11 +4,11 @@ In order to learn Python, I decided to develop a simple GUI based Checkers game.
 Getting Started
 1. Clone the respository.
 
-    $ git clone <link-to-repo>
+    `$ git clone <link-to-repo>`
 
 2. Check that python is installed
 
-    $ python --version
+    `$ python --version`
 
 3. If python is installed, run the app
 
